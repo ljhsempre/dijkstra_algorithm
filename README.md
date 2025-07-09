@@ -6,6 +6,7 @@ Dijkstra Algorithm practice & Developing Dijkstra algorithm that finds a shortes
 # 2025. 7. 9.
 
 [참조](https://www.youtube.com/watch?v=OrJ004Wid4o)
+
 `if **name** == "**main**":
 graph = {
 'A' : {'B':2, 'C':4},
