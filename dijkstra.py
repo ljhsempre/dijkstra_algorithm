@@ -25,11 +25,10 @@ def dijkstra(graph, src, dest):
                         node_data[j]['cost'] = cost
                         node_data[j]['pred'] = node_data[temp]['pred'] + list(temp)      # 딕셔너리 -> 리스트 : 키만 남음 ['A', 'B']
                     heappush(min_heap, (node_data[j]['cost'], j))
-                    print(min_heap)
         heapify(min_heap)
         temp = min_heap[0][1]
-        print('Shortest Distance: ' + str(node_data[dest]['cost']))
-        print('Shortest Path: ' + str(node_data[dest]['pred'] + list(dest)))
+    print('Shortest Distance: ' + str(node_data[dest]['cost']))
+    print('Shortest Path: ' + str(node_data[dest]['pred'] + list(dest)))
 
 if __name__ == "__main__":
     graph = {
