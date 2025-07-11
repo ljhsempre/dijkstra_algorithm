@@ -5,9 +5,9 @@ Dijkstra Algorithm practice & Developing Dijkstra algorithm that finds a shortes
 
 # 2025. 7. 9.
 
-[참조](https://www.youtube.com/watch?v=OrJ004Wid4o)
+[참조한 유튜브 영상 링크](https://www.youtube.com/watch?v=OrJ004Wid4o)
 
-```
+```python
 if __name__ == "__main__":
 graph = {
 'A' : {'B':2, 'C':4},
