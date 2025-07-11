@@ -7,7 +7,7 @@ Dijkstra Algorithm practice & Developing Dijkstra algorithm that finds a shortes
 
 [참조](https://www.youtube.com/watch?v=OrJ004Wid4o)
 
-`if **name** == "**main**":
+if __name__ == "__main__":
 graph = {
 'A' : {'B':2, 'C':4},
 'B' : {'A':2, 'C':3, 'D':8},
@@ -19,6 +19,6 @@ graph = {
 
     source = 'A'
     destination = 'F'
-    dijkstra(graph, source, destination)`
+    dijkstra(graph, source, destination)
 
 `__main__`의 의미는 직접 실행될 때만 이 코드를 실행하라는 뜻
