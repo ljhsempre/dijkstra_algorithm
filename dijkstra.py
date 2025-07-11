@@ -1,45 +1,106 @@
-import sys
-from heapq import heapify, heappush, heappop
+import itertools
+from heapq import heappush, heappop
 
-def dijkstra(graph, src, dest):
-    inf = sys.maxsize                              # infinite value
-    node_data = {
-        'A':{'cost':inf, 'pred':[]},
-        'B':{'cost':inf, 'pred':[]},
-        'C':{'cost':inf, 'pred':[]},
-        'D':{'cost':inf, 'pred':[]},
-        'E':{'cost':inf, 'pred':[]},
-        'F':{'cost':inf, 'pred':[]}
-    }
-    node_data[src]['cost'] = 0                     # Making the value of starting point zero
-    visited = []
-    temp = src
-    for i in range(5):                             # why 5?, n(vertices) : n => n-1 steps
-        if temp not in visited:
-            visited.append(temp)                   # append : adding new value at the end of the list
-            min_heap = []
-            for j in graph[temp]:
-                if j not in visited:
-                    cost = node_data[temp]['cost'] + graph[temp][j]             # cost(c) = cost(b) + distance(b->c)
-                    if cost < node_data[j]['cost']:
-                        node_data[j]['cost'] = cost
-                        node_data[j]['pred'] = node_data[temp]['pred'] + list(temp)      # 딕셔너리 -> 리스트 : 키만 남음 ['A', 'B']
-                    heappush(min_heap, (node_data[j]['cost'], j))
-        heapify(min_heap)
-        temp = min_heap[0][1]
-    print('Shortest Distance: ' + str(node_data[dest]['cost']))
-    print('Shortest Path: ' + str(node_data[dest]['pred'] + list(dest)))
 
-if __name__ == "__main__":
-    graph = {
-        'A' : {'B':2, 'C':4},
-        'B' : {'A':2, 'C':3, 'D':8}, 
-        'C' : {'A':4, 'B':3, 'D':2, 'E':5},
-        'D' : {'B':8, 'C':2, 'E':11, 'F':22},
-        'E' : {'C':5, 'D':11, 'F':1},
-        'F' : {'D':22, 'E':1}
-    }
+class Graph:
+    def __init__(self, adjacency_list):
+        self.adjacency_list = adjacency_list
 
-    source = 'A'
-    destination = 'F'
-    dijkstra(graph, source, destination)
+
+class Vertex:
+    def __init__(self, value):
+        self.value = value
+
+
+class Edge:
+    def __init__(self, distance, vertex):
+        self.distance = distance
+        self.vertex = vertex
+
+
+def dijkstra(graph, start, end):
+    previous = {v: None for v in graph.adjacency_list.keys()}
+    visited = {v: False for v in graph.adjacency_list.keys()}
+    distances = {v: float("inf") for v in graph.adjacency_list.keys()}
+    distances[start] = 0
+    queue = PriorityQueue()
+    queue.add_task(0, start)
+    path = []
+    while queue:
+        removed_distance, removed = queue.pop_task()
+        visited[removed] = True
+
+        # this piece of code is not part of the video, but it's useful to print the final path and distance
+        if removed is end:
+            while previous[removed]:
+                path.append(removed.value)
+                removed = previous[removed]
+            path.append(start.value)
+            print(f"shortest distance to {end.value}: ", distances[end])
+            print(f"path to {end.value}: ", path[::-1])
+            return
+
+        for edge in graph.adjacency_list[removed]:
+            if visited[edge.vertex]:
+                continue
+            new_distance = removed_distance + edge.distance
+            if new_distance < distances[edge.vertex]:
+                distances[edge.vertex] = new_distance
+                previous[edge.vertex] = removed
+                queue.add_task(new_distance, edge.vertex)
+    return
+
+
+# slightly modified heapq implementation from https://docs.python.org/3/library/heapq.html
+class PriorityQueue:
+    def __init__(self):
+        self.pq = []  # list of entries arranged in a heap
+        self.entry_finder = {}  # mapping of tasks to entries
+        self.counter = itertools.count()  # unique sequence count
+
+    def __len__(self):
+        return len(self.pq)
+
+    def add_task(self, priority, task):
+        'Add a new task or update the priority of an existing task'
+        if task in self.entry_finder:
+            self.update_priority(priority, task)
+            return self
+        count = next(self.counter)
+        entry = [priority, count, task]
+        self.entry_finder[task] = entry
+        heappush(self.pq, entry)
+
+    def update_priority(self, priority, task):
+        'Update the priority of a task in place'
+        entry = self.entry_finder[task]
+        count = next(self.counter)
+        entry[0], entry[1] = priority, count
+
+    def pop_task(self):
+        'Remove and return the lowest priority task. Raise KeyError if empty.'
+        while self.pq:
+            priority, count, task = heappop(self.pq)
+            del self.entry_finder[task]
+            return priority, task
+        raise KeyError('pop from an empty priority queue')
+
+
+# testing the algorithm
+vertices = [Vertex("A"), Vertex("B"), Vertex("C"), Vertex("D"), Vertex("E"), Vertex("F"), Vertex("G"), Vertex("H")]
+A, B, C, D, E, F, G, H = vertices
+
+adj_list = {
+    A: [Edge(1.8, B), Edge(1.5, C), Edge(1.4, D)],
+    B: [Edge(1.8, A), Edge(1.6, E)],
+    C: [Edge(1.5, A), Edge(1.8, E), Edge(2.1, F)],
+    D: [Edge(1.4, A), Edge(2.7, F), Edge(2.4, G)],
+    E: [Edge(1.6, B), Edge(1.8, C), Edge(1.4, F), Edge(1.6, H)],
+    F: [Edge(2.1, C), Edge(2.7, D), Edge(1.4, E), Edge(1.3, G), Edge(1.2, H)],
+    G: [Edge(2.4, D), Edge(1.3, F), Edge(1.5, H)],
+    H: [Edge(1.6, E), Edge(1.2, F), Edge(1.5, G)],
+}
+
+my_graph = Graph(adj_list)
+
+dijkstra(my_graph, start=A, end=F)
