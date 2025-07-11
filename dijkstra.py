@@ -3,13 +3,33 @@ from heapq import heappush, heappop
 
 
 class Graph:
-    def __init__(self, adjacency_list):
-        self.adjacency_list = adjacency_list
-
+    def __init__(self):
+        self.adjacency = {}
+    
+    def add_vertex(self, vertex):
+        if vertex not in self.adjacency:
+            self.adjacency[vertex] = []
+    
+    def add_edge(self, from_vertex, to_vertex, distance):
+        self.add_vertex(from_vertex)
+        self.add_vertex(to_vertex)
+        self.adjacency[from_vertex].append(Edge(distance, to_vertex))
 
 class Vertex:
     def __init__(self, value):
         self.value = value
+
+    def __hash__(self):
+        return hash(self.value)
+
+    def __eq__(self, other):
+        return isinstance(other, Vertex) and self.value == other.value
+
+    def __lt__(self, other):  # heapq에서 비교 필요
+        return self.value < other.value
+
+    def __repr__(self):  # 디버깅용
+        return f"Vertex({self.value})"
 
 
 class Edge:
@@ -19,19 +39,19 @@ class Edge:
 
 
 def dijkstra(graph, start, end):
-    previous = {v: None for v in graph.adjacency_list.keys()}
-    visited = {v: False for v in graph.adjacency_list.keys()}
-    distances = {v: float("inf") for v in graph.adjacency_list.keys()}
+    previous = {v: None for v in graph.adjacency.keys()}
+    visited = {v: False for v in graph.adjacency.keys()}
+    distances = {v: float("inf") for v in graph.adjacency.keys()}
     distances[start] = 0
     queue = PriorityQueue()
     queue.add_task(0, start)
     path = []
-    while queue:
+    while len(queue):
         removed_distance, removed = queue.pop_task()
         visited[removed] = True
 
         # this piece of code is not part of the video, but it's useful to print the final path and distance
-        if removed is end:
+        if removed == end:
             while previous[removed]:
                 path.append(removed.value)
                 removed = previous[removed]
@@ -40,7 +60,7 @@ def dijkstra(graph, start, end):
             print(f"path to {end.value}: ", path[::-1])
             return
 
-        for edge in graph.adjacency_list[removed]:
+        for edge in graph.adjacency[removed]:
             if visited[edge.vertex]:
                 continue
             new_distance = removed_distance + edge.distance
@@ -87,20 +107,13 @@ class PriorityQueue:
 
 
 # testing the algorithm
-vertices = [Vertex("A"), Vertex("B"), Vertex("C"), Vertex("D"), Vertex("E"), Vertex("F"), Vertex("G"), Vertex("H")]
-A, B, C, D, E, F, G, H = vertices
+vertices = [Vertex("A"), Vertex("B"), Vertex("C"), Vertex("D")]
+A, B, C, D = vertices
 
-adj_list = {
-    A: [Edge(1.8, B), Edge(1.5, C), Edge(1.4, D)],
-    B: [Edge(1.8, A), Edge(1.6, E)],
-    C: [Edge(1.5, A), Edge(1.8, E), Edge(2.1, F)],
-    D: [Edge(1.4, A), Edge(2.7, F), Edge(2.4, G)],
-    E: [Edge(1.6, B), Edge(1.8, C), Edge(1.4, F), Edge(1.6, H)],
-    F: [Edge(2.1, C), Edge(2.7, D), Edge(1.4, E), Edge(1.3, G), Edge(1.2, H)],
-    G: [Edge(2.4, D), Edge(1.3, F), Edge(1.5, H)],
-    H: [Edge(1.6, E), Edge(1.2, F), Edge(1.5, G)],
-}
+graph = Graph()
+graph.add_edge(A, B, 1)
+graph.add_edge(B, C, 1)
+graph.add_edge(A, C, 1)
+graph.add_edge(C, D, 1)
 
-my_graph = Graph(adj_list)
-
-dijkstra(my_graph, start=A, end=F)
+dijkstra(graph, start=A, end=D)

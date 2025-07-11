@@ -36,6 +36,7 @@ Dijkstra Algorithm practice & Developing Dijkstra algorithm that finds a shortes
 ## 2025. 7. 9.
 
 > ex_dijkstra.py
+
 > [참조한 유튜브 영상 링크 - [7.5] Dijkstra Shortest Path Algorithm in Python - ThinkX Academy](https://www.youtube.com/watch?v=OrJ004Wid4o)
 
 ```python
@@ -61,6 +62,7 @@ graph = {
 ## 2025. 7. 11.
 
 > dijkstra.py
+
 > [참조한 유튜브 영상 링크 - Dijkstra's Algorithm - A step by step analysis, with sample Python code - Glassbyte ](https://www.youtube.com/watch?v=_B5cx-WD5EA&t=44s) > [코드와 이미지 자료는 유튜브 영상을 통해 얻었습니다.]
 
 이 영상에서는 이전 영상의 예제와는 다른 방법을 사용한다.
@@ -73,3 +75,12 @@ graph = {
 앞서 언급되었던 heapq 라이브러리를 직접 구현하여 살짝 수정한 유사한 기능을 가진 PriorityQueue를 도입해 우선순위를 결정한다.
 (사실 무슨 의미인지는 대략 알겠지만 설명하는 것이 너무 힘드니 첨부 사진을 붙이겠다.)
 ![overall logic](./md_src/overall.png)
+
+이 코드는 ex_dijkstra.py 보다 좀 더 객체지향적으로 작성되었다.
+유튜브 예제의 코드를 바탕으로 몇 가지를 수정하였고, 이 코드를 바탕으로 좀 더 살을 덧붙이고자 한다.
+
+---
+
+먼저, 나의 매우 똑똑한 코딩친구(Name : Chatgpt-4o)의 도움을 받아 코드를 일부 수정하였다.
+사용자에게 start vertice 와 end vertice를 입력 받아 최단 경로를 만드는 기능을 구현하도록 하겠다.
+이 기능은 새로운 브랜치 'input'으로 분기하여 구현하였다.
