@@ -82,7 +82,7 @@ graph = {
 ---
 
 먼저, 나의 매우 똑똑한 코딩친구(Name : Chatgpt-4o)의 도움을 받아 코드를 일부 수정하였다.  
-사용자에게 start vertice 와 end vertice를 입력 받아 최단 경로를 만드는 기능을 구현하도록 하겠다.  
+사용자에게 start vertex와 end vertex를 입력 받아 최단 경로를 만드는 기능을 구현하도록 하겠다.  
 이 기능은 새로운 브랜치 'input'으로 분기하여 구현하였다.
 
 ```python
@@ -205,4 +205,5 @@ path to G:  ['A', 'E', 'F', 'G']
 
 ### 이로써 1차 목표를 달성하였다!!!
 
-(상기의 내용은 새로운 브랜치 'generalized'로 분기함. 분기하고 main 브랜치로 병합.)
+(상기의 내용은 새로운 브랜치 'generalized'로 분기함. 분기하고 main 브랜치로 병합.)  
+(이제부터 GitHub의 PullRequest에도 코드 수정 내용에 대해서 기록하겠음.)
