@@ -5,7 +5,7 @@ Dijkstra Algorithm practice & Developing Dijkstra algorithm that finds a shortes
 
 ---
 
-## ⚙️ 설치 및 실행 안내 (전문가용)
+## ⚙️ 설치 및 실행 안내
 
 ```bash
 # 가상환경 생성 및 활성화
