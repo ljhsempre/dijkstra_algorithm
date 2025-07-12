@@ -145,13 +145,16 @@ print('입력한 정점은 다음과 같습니다.')
 for vertex in graph.adjacency.keys():
     print(vertex.name,end=" ")
 print('')
-start_name = input("시작 정점의 이름을 입력하세요: ")
-end_name = input("도착 정점의 이름을 입력하세요: ")
+keepGoing = 'y'
+while keepGoing == 'y':
+    start_name = input("시작 정점의 이름을 입력하세요: ")
+    end_name = input("도착 정점의 이름을 입력하세요: ")
 
 # 유효성 검사
-if start_name not in name_to_vertex or end_name not in name_to_vertex:
-    print("잘못된 정점 이름입니다.")
-else:
-    start = name_to_vertex[start_name]
-    end = name_to_vertex[end_name]
-    dijkstra(graph, start, end)
+    if start_name not in name_to_vertex or end_name not in name_to_vertex:
+        print("잘못된 정점 이름입니다.")
+    else:
+        start = name_to_vertex[start_name]
+        end = name_to_vertex[end_name]
+        dijkstra(graph, start, end)
+        keepGoing = input('이 값을 가지고 한 번 더 실행하시겠습니까? 원하신다면 \'y\' 아니면 빈 칸으로 남겨주십시오. :')

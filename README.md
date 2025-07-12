@@ -5,6 +5,22 @@ Dijkstra Algorithm practice & Developing Dijkstra algorithm that finds a shortes
 
 ---
 
+## ⚙️ 설치 및 실행 안내 (전문가용)
+
+```bash
+# 가상환경 생성 및 활성화
+python3 -m venv .venv
+source .venv/bin/activate   # Windows의 경우 .venv\Scripts\activate
+
+# 의존성 설치
+pip install -r requirements.txt
+
+# 실행
+python main.py
+```
+
+---
+
 ## 구현 목표
 
 ### I. 1차 목표
@@ -207,3 +223,59 @@ path to G:  ['A', 'E', 'F', 'G']
 
 (상기의 내용은 새로운 브랜치 'generalized'로 분기함. 분기하고 main 브랜치로 병합.)  
 (이제부터 GitHub의 PullRequest에도 코드 수정 내용에 대해서 기록하겠음.)
+
+---
+
+## 2025. 7. 12
+
+```python
+keepGoing = 'y'
+while keepGoing == 'y':
+    ~
+keepGoing = input('이 값을 가지고 한 번 더 실행하시겠습니까? 원하신다면 \'y\' 아니면 빈 칸으로 남겨주십시오.')
+```
+
+위 코드를 통해 같은 값을 기지고 여러 번 시도해볼 수 있도록 하였다.
+
+---
+
+> map_vertex_edit 브랜치로 분기.
+
+이제 사용자가 2차원 도면을 불러와서 그 도면 위에 정점을 찍고, 정점 사이의 거리를 구하는 기능을 구현하도록 하겠다.  
+먼저 이미지와 거리 계산에 대한 기능을 구현하기 위해 다음과 같은 라이브러리를 사용하겠다.
+
+- Tkinter : 이미지 불러오기와 마우스 이벤트
+- PIL.ImageTk : 이미지 출력
+- OpenCV : 거리 계산
+
+```python
+# 클릭 이벤트 바인딩
+canvas.bind("<Button-1>", on_click)
+```
+
+클릭 이벤트 바인딩을 통해 이미지가 표시된 영역에서 왼쪽 마우스를 클릭했을 때에 on_click 함수(위치 좌표 추가함수)가 자동으로 호출되도록 한다.
+
+# pillow lib 다운로드 필요
+
+처음으로 중대한 문제가 발생하였다.  
+콘솔에 불러온 이미지가 안 떠서 한 시간 동안 고생했다.
+
+```python
+image_id = canvas.create_image(0,0, anchor=tk.NW, image=tk_image)
+canvas.tag_lower(image_id)
+canvas.create_image(0, 0, anchor=tk.NW, image=tk_image)  # ← 이 줄이 문제!
+```
+
+알고보니 create_image를 두 번 작성해서 맨 마지막에 다시 그린 이미지가 전부 덮어버린 것이었다.
+
+---
+
+그게 아니었다. 그 이후로 두 시간동안 정보 탐색을 한 결과:  
+현재 개발 환경인 macOS에서 Tkinter + Pillow 이미지가 미표시되는 문제였다.  
+Tkinter와 Pillow를 사용해 도면 이미지를 띄우고자 함.  
+에러는 출력창에 아무것도 뜨지 않았지만, 이미지가 콘솔에 보이지 않았다!!
+
+macOS의 파이썬 버전과 tkinter, Pillow 간 렌더링 호환성 이슈였다.
+가상환경을 구성할 때 구버전 Python 기반으로 생성되어서 tkinter Pillow 기능이 제대로 작동하지 않았다.
+
+그래서 최신 Python 버전을 다운로드 받고 가상환경으로 새로 만들고 다시 Tkinter + Pillow 를 설치하였다.
