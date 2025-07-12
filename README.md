@@ -279,3 +279,17 @@ macOS의 파이썬 버전과 tkinter, Pillow 간 렌더링 호환성 이슈였�
 가상환경을 구성할 때 구버전 Python 기반으로 생성되어서 tkinter Pillow 기능이 제대로 작동하지 않았다.
 
 그래서 최신 Python 버전을 다운로드 받고 가상환경으로 새로 만들고 다시 Tkinter + Pillow 를 설치하였다.
+
+---
+
+> integrated branch로 분기
+
+main.py를 만들어서 다익스트라 알고리즘과 파이썬 GUI 구현 기술을 통합하였다.
+main.py에서 dijkstra를 import하였고, 화면에 뜨는 도면에 좌클릭을 하여 두 정점을 선택하고 엔터를 누르면 그 사이의 길이를 출력해주는 것 까지 구현하였다.
+![example_diagram](./md_src/integrated_test.png)
+
+```
+정점 클릭 위치: (528, 196)
+정점 클릭 위치: (620, 236)
+최단 경로: ['A', 'D']
+```
