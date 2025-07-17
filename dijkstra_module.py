@@ -45,20 +45,14 @@ def dijkstra(graph, start, end):
     distances[start] = 0
     queue = PriorityQueue()
     queue.add_task(0, start)
-    path = []
+
     while len(queue):
         removed_distance, removed = queue.pop_task()
         visited[removed] = True
 
         # this piece of code is not part of the video, but it's useful to print the final path and distance
         if removed == end:
-            while previous[removed]:
-                path.append(removed.name)
-                removed = previous[removed]
-            path.append(start.name)
-            print(f"shortest distance to {end.name}: ", distances[end])
-            print(f"path to {end.name}: ", path[::-1])
-            return
+            break
 
         for edge in graph.adjacency[removed]:
             if visited[edge.vertex]:
@@ -68,7 +62,14 @@ def dijkstra(graph, start, end):
                 distances[edge.vertex] = new_distance
                 previous[edge.vertex] = removed
                 queue.add_task(new_distance, edge.vertex)
-    return
+    path = []
+    current = end
+    while current:
+        path.append(current)
+        current = previous[current]
+    path.reverse()
+
+    return path, distances[end]
 
 
 # slightly modified heapq implementation from https://docs.python.org/3/library/heapq.html
@@ -105,53 +106,16 @@ class PriorityQueue:
             return priority, task
         raise KeyError('pop from an empty priority queue')
 
+# 테스트용 CLI (원하면 유지)
+if __name__ == "__main__":
+    vA = Vertex("A")
+    vB = Vertex("B")
+    vC = Vertex("C")
+    graph = Graph()
+    graph.add_edge(vA, vB, 5)
+    graph.add_edge(vB, vC, 3)
+    graph.add_edge(vA, vC, 10)
 
-# testing the algorithm
-
-# 그래프 생성
-graph = Graph()
-name_to_vertex = {}
-
-while True:
-    node_name = input('정점 이름을 입력하세요. (끝내려면 빈칸): ').strip() # strip(): 문자열 처리에서 불필요한 공백이나 줄바꿈을 없애는 함수.
-    if node_name == "":
-        break
-    if node_name not in name_to_vertex:
-        name_to_vertex[node_name] = Vertex(node_name)
-    from_vertex = name_to_vertex[node_name]
-
-    while True:
-        adjacent_info = input(f'{node_name}에 인접한 정점과 거리 (예 : D 4), (없으면 빈칸): ')
-        if adjacent_info == '':
-            break
-        try:     # try-except 구문: 에러가 날 수 있는 코드를 안전하게 실행하기 위한 예외 처리 도구: 에러가 나더라도 그냥 프로그램 속행하라
-            neighbor_name, dist = adjacent_info.split() # split(): 문자열을 공백을 기준으로 나누어서 리스트로 처리하는 함수
-            dist = float(dist)
-        except ValueError:
-            print('형식이 잘못되었습니다. 다시 입력해주세요.')
-            continue
-
-        if neighbor_name not in name_to_vertex:
-            name_to_vertex[neighbor_name] = Vertex(neighbor_name)
-        to_vertex = name_to_vertex[neighbor_name]
-
-        graph.add_edge(from_vertex, to_vertex, dist)
-
-# 이름 -> Vertex 매핑
-name_to_vertex = {v.name: v for v in graph.adjacency.keys()}
-
-# 사용자 입력
-print('입력한 정점은 다음과 같습니다.')
-for vertex in graph.adjacency.keys():
-    print(vertex.name,end=" ")
-print('')
-start_name = input("시작 정점의 이름을 입력하세요: ")
-end_name = input("도착 정점의 이름을 입력하세요: ")
-
-# 유효성 검사
-if start_name not in name_to_vertex or end_name not in name_to_vertex:
-    print("잘못된 정점 이름입니다.")
-else:
-    start = name_to_vertex[start_name]
-    end = name_to_vertex[end_name]
-    dijkstra(graph, start, end)
+    path, dist = dijkstra(graph, vA, vC)
+    print("최단 경로:", [v.name for v in path])
+    print("거리:", dist)
